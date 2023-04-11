@@ -153,14 +153,16 @@ public class AVLTree{
         return node;
     }
 
+    // 자식이 두개 존재할때 삭제하는 메서드
     private void deleteHaveTwoChild(Node node) {
-        // Find minimum node of right subtree ("inorder successor" of current node)
+
+        //오른쪽 자식노드에 대해서 가장 작은 자식을 찾고
         Node isS = findMinimum(node.right);
 
-        // Copy inorder successor's data to current node
+        // 교해주며
         node.data = isS.data;
 
-        // Delete inorder successor recursively
+        // 오른쪽 자식노드에 대해서도 deleteNode를 다시 호출하며 수행해주어, 결과적으로 이진탐색트리의 형태를 갖게만듬
         node.right = deleteNode(isS.data, node.right);
     }
 
