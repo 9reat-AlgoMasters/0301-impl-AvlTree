@@ -15,8 +15,7 @@ public class AVLTreeTest {
             System.out.println("(1) 원소 추가");
             System.out.println("(2) 출력(중위순회)");
             System.out.println("(3) 원소 삭제");
-            System.out.println("(4) 높이 출력(중위순회)");
-            System.out.println("(5) 종료.");
+            System.out.println("(4) 종료.");
             System.out.print("선택하세요. >> ");
             int choice = Integer.parseInt(br.readLine());
 
@@ -42,12 +41,7 @@ public class AVLTreeTest {
                 System.out.printf("현재 Tree size : %d\n", avlt.size);
                 continue;
             }
-            if(choice == 4) {
-                System.out.println("원소의 높이를 출력합니다.(중위순회)");
-                avlt.printHeightByInOrder();
-                continue;
-            }
-            if (choice == 5) {
+            if (choice == 4) {
                 System.out.println("====AVL TREE TEST를 종료합니다.====");
                 break;
             }
