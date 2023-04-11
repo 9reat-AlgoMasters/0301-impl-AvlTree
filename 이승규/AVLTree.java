@@ -17,8 +17,9 @@ public class AVLTree{
     public void updateHeight(Node node) { // 던저져지는 node의 height를 자식들의 height와 비교하여, 큰놈에 +1
         int leftChildHeight = height(node.left);
         int rightChildHeight = height(node.right);
-        node.height = leftChildHeight -rightChildHeight;
+        node.height = Math.max(leftChildHeight, rightChildHeight) +1;
     }
+
     public int balanceFactor(Node node) {
         return height(node.right) - height(node.left);
     }
@@ -121,7 +122,8 @@ public class AVLTree{
     }
 
     Node deleteNode(int key, Node node) {
-        // No node at current position --> go up the recursion
+
+        // 노드가 존재하지 않을 경우
         if (node == null) {
             return null;
         }
