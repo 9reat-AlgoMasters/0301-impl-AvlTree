@@ -4,6 +4,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class AvlTree implements SearchTree {
+    private static final boolean LEFT = true;
+    private static final boolean RIGHT = true;
+
     private int debug=0;
     static class Node {
         int value;
@@ -35,6 +38,14 @@ public class AvlTree implements SearchTree {
             int rightNodeHeight = right == null ? 0 : right.height;
             return leftNodeHeight - rightNodeHeight;
         }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "value=" + value +
+                    ", height=" + height +
+                    '}';
+        }
     }
 
     private Node root;
@@ -47,9 +58,6 @@ public class AvlTree implements SearchTree {
         } else {
             insertRecur(root, value);
         }
-
-        // balance가 깨졌을 때 회전 시켜준다.
-
         size++;
     }
 
@@ -78,8 +86,9 @@ public class AvlTree implements SearchTree {
     }
 
 
-
     private void makeBalanced(Node node) {
+        if (isBalanced(node)) return;
+
         if (node.getBalanceFactor() == 2) { // LL, LR
             if (node.left.getBalanceFactor() == 1) { // LL
                 rotateRight(node);
@@ -176,6 +185,10 @@ public class AvlTree implements SearchTree {
     private boolean isUnbalanced(Node node) {
         return Math.abs(node.getBalanceFactor()) > 1;
     }
+
+    private boolean isBalanced(Node node) {
+        return Math.abs(node.getBalanceFactor()) <= 1;
+    }
     
     private void changeHeight(Node node, int height) {
 //        System.out.printf("change! height : %d\n", height);
@@ -211,22 +224,48 @@ public class AvlTree implements SearchTree {
         }
     }
 
+    private void updateHeight(Node node, boolean updatedChildSide) {
+//        System.out.printf("update! height : %d\n", height);
+        if (node == null) {
+            return;
+        }
+
+        Node updatedChild = updatedChildSide ? node.left : node.right;
+        int maxChildHeight = findMaxHeightOfChild(node);
+
+        if (updatedChild.height == maxChildHeight) {
+            node.height =  updatedChild.height + 1;
+            if (isUnbalanced(node)) {
+                makeBalanced(node);
+                node = node.parent;
+            }
+            if (node != root) {
+                updateHeight(node.parent, node.parent.left == node);
+            }
+
+        }
+    }
+
     @Override
     public void delete(int value) {
         Node target = findByValue(root, value); // 없으면 CustomDuplicatedElementException 발생
 //        System.out.printf("찾은 target : %d\n", target.value);
 
-        if (target.isChildEmpty()) { // 자식이 없을 때
+
+        if (target.isChildEmpty()) { // 자식이 없을 때 --> 높이만 갱신
             if (target == root) {
                 root = null;
                 return;
             }
 
+            boolean isTargetLeftChild = target.parent.left == target;
             if (target.parent.left == target) {
                 target.parent.left = null;
             } else {
                 target.parent.right = null;
             }
+            updateHeight(target.parent, isTargetLeftChild);
+
         } else if (target.hasOneChild()) { // 자식이 하나만 있을 때
             Node next = target.left == null ? target.right : target.left;
             if (target == root) {
@@ -333,5 +372,9 @@ public class AvlTree implements SearchTree {
             }
             System.out.println();
         }
+    }
+
+    public void showRoot() {
+        System.out.println(root);
     }
 }

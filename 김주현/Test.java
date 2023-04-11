@@ -20,17 +20,19 @@ public class Test {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
 
-        AvlTree bst = new AvlTree();
-        int[] addList = {3, 2, 1};
+        AvlTree avl = new AvlTree();
+        int[] addList = {5, 4, 3, 2, 1};
         for (int n : addList) {
             System.out.printf("%d 추가!\n", n);
-            bst.insert(n);
-            bst.printTree();
+            avl.insert(n);
+            avl.printTree();
         }
 
-        /*bst.delete(6);
+        avl.showRoot();
+
+        /*avl.delete(6);
         System.out.println("6을 지웠습니다!");
-        bst.printTree();*/
+        avl.printTree();*/
 
         bw.write(sb.toString());
         bw.flush();
