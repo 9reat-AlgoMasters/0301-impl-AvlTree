@@ -21,12 +21,22 @@ public class Test {
         StringBuilder sb = new StringBuilder();
 
         AvlTree avl = new AvlTree();
-        int[] addList = {5, 4, 3, 2, 1};
+        int[] addList = {13, 10, 7, 4, 1};
         for (int n : addList) {
             System.out.printf("%d 추가!\n", n);
             avl.insert(n);
             avl.printTree();
         }
+
+        System.out.printf("&^&^ delete %d!!!\n", 13);
+
+        avl.delete(13);
+        avl.printTree();
+
+
+        System.out.printf("&^&^ delete %d!!!\n", 1);
+        avl.delete(1);
+        avl.printTree();
 
         avl.showRoot();
 
