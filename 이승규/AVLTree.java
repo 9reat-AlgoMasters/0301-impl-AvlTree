@@ -17,8 +17,9 @@ public class AVLTree{
     public void updateHeight(Node node) { // 던저져지는 node의 height를 자식들의 height와 비교하여, 큰놈에 +1
         int leftChildHeight = height(node.left);
         int rightChildHeight = height(node.right);
-        node.height = leftChildHeight -rightChildHeight;
+        node.height = Math.max(leftChildHeight, rightChildHeight) +1;
     }
+
     public int balanceFactor(Node node) {
         return height(node.right) - height(node.left);
     }
@@ -87,7 +88,7 @@ public class AVLTree{
             node = new Node(key);
         }
 
-        // Otherwise, traverse the tree to the left or right depending on the key
+        // key값과 node의 값을 비교하여 왼쪽, 오른쪽에 넣을지 정하기
         else if (key < node.data) {
             node.left = insertNode(key, node.left);
         } else if (key > node.data) {
@@ -110,7 +111,7 @@ public class AVLTree{
     Node delete(int key, Node node) {
         node = deleteNode(key, node);
 
-        // Node is null if the tree doesn't contain the key
+
         if (node == null) {
             return null;
         }
@@ -121,33 +122,32 @@ public class AVLTree{
     }
 
     Node deleteNode(int key, Node node) {
-        // No node at current position --> go up the recursion
+
+        // 노드가 존재하지 않을 경우
         if (node == null) {
             return null;
         }
 
-        // Traverse the tree to the left or right depending on the key
+        // key값과 node의 값을 비교하여, 같을때까지 함수를 호출하며 삭제해주기
         if (key < node.data) {
             node.left = deleteNode(key, node.left);
         } else if (key > node.data) {
             node.right = deleteNode(key, node.right);
         }
 
-        // At this point, "node" is the node to be deleted
-
-        // Node has no children --> just delete it
+        // 리프 노드일경우
         else if (node.left == null && node.right == null) {
             node = null;
         }
 
-        // Node has only one child --> replace node by its single child
+        // 자식이 한개일 경우
         else if (node.left == null) {
             node = node.right;
         } else if (node.right == null) {
             node = node.left;
         }
 
-        // Node has two children
+        // 자식이 두 명일 경우
         else {
             deleteHaveTwoChild(node);
         }
@@ -155,14 +155,16 @@ public class AVLTree{
         return node;
     }
 
+    // 자식이 두개 존재할때 삭제하는 메서드
     private void deleteHaveTwoChild(Node node) {
-        // Find minimum node of right subtree ("inorder successor" of current node)
+
+        //오른쪽 자식노드에 대해서 가장 작은 자식을 찾고
         Node isS = findMinimum(node.right);
 
-        // Copy inorder successor's data to current node
+        // 교해주며
         node.data = isS.data;
 
-        // Delete inorder successor recursively
+        // 오른쪽 자식노드에 대해서도 deleteNode를 다시 호출하며 수행해주어, 결과적으로 이진탐색트리의 형태를 갖게만듬
         node.right = deleteNode(isS.data, node.right);
     }
 
