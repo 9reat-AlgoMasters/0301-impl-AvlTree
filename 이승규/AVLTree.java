@@ -87,7 +87,7 @@ public class AVLTree{
             node = new Node(key);
         }
 
-        // Otherwise, traverse the tree to the left or right depending on the key
+        // key값과 node의 값을 비교하여 왼쪽, 오른쪽에 넣을지 정하기
         else if (key < node.data) {
             node.left = insertNode(key, node.left);
         } else if (key > node.data) {
@@ -110,7 +110,7 @@ public class AVLTree{
     Node delete(int key, Node node) {
         node = deleteNode(key, node);
 
-        // Node is null if the tree doesn't contain the key
+
         if (node == null) {
             return null;
         }
@@ -126,28 +126,26 @@ public class AVLTree{
             return null;
         }
 
-        // Traverse the tree to the left or right depending on the key
+        // key값과 node의 값을 비교하여, 같을때까지 함수를 호출하며 삭제해주기
         if (key < node.data) {
             node.left = deleteNode(key, node.left);
         } else if (key > node.data) {
             node.right = deleteNode(key, node.right);
         }
 
-        // At this point, "node" is the node to be deleted
-
-        // Node has no children --> just delete it
+        // 리프 노드일경우
         else if (node.left == null && node.right == null) {
             node = null;
         }
 
-        // Node has only one child --> replace node by its single child
+        // 자식이 한개일 경우
         else if (node.left == null) {
             node = node.right;
         } else if (node.right == null) {
             node = node.left;
         }
 
-        // Node has two children
+        // 자식이 두 명일 경우
         else {
             deleteHaveTwoChild(node);
         }
